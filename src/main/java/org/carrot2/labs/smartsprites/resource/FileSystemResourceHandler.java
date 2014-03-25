@@ -25,6 +25,8 @@ public class FileSystemResourceHandler implements ResourceHandler
     /** The root directory */
     private final String documentRootDir;
 
+    private final String documentRelativeRootDir;
+
     /** The charset to assume in the {@link #getResourceAsReader(String)} method. */
     private final String charset;
 
@@ -36,10 +38,11 @@ public class FileSystemResourceHandler implements ResourceHandler
      *            method
      * @param messageLog the message log
      */
-    public FileSystemResourceHandler(String documentRootDirPath, String charset,
+    public FileSystemResourceHandler(String documentRootDirPath, String documentRelativeRootDir, String charset,
         MessageLog messageLog)
     {
         this.documentRootDir = documentRootDirPath;
+        this.documentRelativeRootDir = documentRelativeRootDir;
         this.messageLog = messageLog;
         this.charset = charset;
         if (!Charset.isSupported(charset))
@@ -114,6 +117,10 @@ public class FileSystemResourceHandler implements ResourceHandler
         }
         else
         {
+            if (StringUtils.isNotBlank(documentRelativeRootDir)) {
+                return FilenameUtils.concat(documentRelativeRootDir, filePath);
+            }
+
             return FilenameUtils.concat(FilenameUtils.getFullPath(baseFile), filePath);
         }
     }

@@ -69,6 +69,16 @@ public final class SmartSpritesParameters
     @Option(name = "--document-root-dir-path", metaVar = "DIR")
     private String documentRootDir;
 
+
+    /**
+     * Document root path for relative image urls in CSS. Every relative path found will
+     * be mapped relative to this path. This is mainly useful if you're using SmartSprites
+     * with some other pre-processing solutions and are doing all the manipulation in
+     * temp dir (ie. php assetic fw)
+     */
+    @Option(name = "--document-relative-root-dir-path", metaVar = "DIR")
+    private String documentRelativeRootDir;
+
     /**
      * Message logging level. If you're getting lots of INFO messages and want to see only
      * warnings, set this option to WARN.
@@ -318,6 +328,10 @@ public final class SmartSpritesParameters
     public String getDocumentRootDir()
     {
         return documentRootDir;
+    }
+
+    public String getDocumentRelativeRootDir() {
+        return documentRelativeRootDir;
     }
 
     public boolean hasDocumentRootDir()

@@ -20,7 +20,8 @@ public class SpriteDirectiveOccurrenceCollectorTest extends TestWithMemoryMessag
     public void prepare()
     {
         spriteDirectiveOccurrenceCollector = new SpriteDirectiveOccurrenceCollector(
-            messageLog, new FileSystemResourceHandler(null, 
+            messageLog, new FileSystemResourceHandler(null,
+                null,
                 SmartSpritesParameters.DEFAULT_CSS_FILE_ENCODING, messageLog));
     }
 

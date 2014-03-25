@@ -59,7 +59,7 @@ public class SpriteBuilder
     public SpriteBuilder(SmartSpritesParameters parameters, MessageLog messageLog)
     {
         this(parameters, messageLog, new FileSystemResourceHandler(
-            parameters.getDocumentRootDir(), parameters.getCssFileEncoding(), messageLog));
+            parameters.getDocumentRootDir(), parameters.getDocumentRelativeRootDir(), parameters.getCssFileEncoding(), messageLog));
     }
 
     /**
