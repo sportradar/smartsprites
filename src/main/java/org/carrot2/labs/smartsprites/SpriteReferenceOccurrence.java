@@ -20,13 +20,24 @@ public class SpriteReferenceOccurrence extends SpriteDirectiveOccurrence
     /** Indicates whether the original css property has been marked as important */
     public final boolean important;
 
+    /** Indicates whether this reference is spread over two lines. If it is, the first line is css property,
+     * while the second one is sprite ref */
+    public final boolean dualLine;
+
     public SpriteReferenceOccurrence(SpriteReferenceDirective spriteReferenceDirective,
         String imageFile, String cssFile, int line, boolean important)
+    {
+        this(spriteReferenceDirective, imageFile, cssFile, line, important, false);
+    }
+
+    public SpriteReferenceOccurrence(SpriteReferenceDirective spriteReferenceDirective,
+         String imageFile, String cssFile, int line, boolean important, boolean dualLine)
     {
         super(cssFile, line);
         this.spriteReferenceDirective = spriteReferenceDirective;
         this.imagePath = imageFile;
         this.important = important;
+        this.dualLine = dualLine;
     }
 
     /**

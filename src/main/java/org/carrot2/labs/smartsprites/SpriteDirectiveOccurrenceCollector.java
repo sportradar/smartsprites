@@ -112,26 +112,37 @@ public class SpriteDirectiveOccurrenceCollector
         messageLog.info(MessageType.READING_SPRITE_REFERENCE_DIRECTIVES, cssFile);
         messageLog.setCssFile(cssFile);
 
-        int lineNumber = -1;
-        String line;
+        int lineNumber = -1, effectiveLineNumber;
+        String line, prevLine = null;
+
+        final boolean checkForMultiline = true;
 
         try
         {
             while ((line = reader.readLine()) != null)
             {
                 messageLog.setLine(++lineNumber);
+                effectiveLineNumber = lineNumber;
 
                 final String directiveString = extractSpriteReferenceDirectiveString(line);
                 if (directiveString == null)
                 {
+                    prevLine = line;
                     continue;
                 }
 
-                final CssProperty backgroundProperty = extractSpriteReferenceCssProperty(line);
+                ExtractorResult res = extractSpriteReferenceCssProperty(line, checkForMultiline ? prevLine : null);
+                if (res == null) {
+                    continue;
+                }
+
+                CssProperty backgroundProperty = res.cssProperty;
+
                 final String imageUrl = CssSyntaxUtils.unpackUrl(
                     backgroundProperty.value, messageLog);
                 if (imageUrl == null)
                 {
+                    prevLine = line;
                     continue;
                 }
 
@@ -139,11 +150,18 @@ public class SpriteDirectiveOccurrenceCollector
                     .parse(directiveString, spriteImageDirectives, messageLog);
                 if (directive == null)
                 {
+                    prevLine = line;
                     continue;
                 }
 
+                if (res.propertyInPrevLine) {
+                    effectiveLineNumber--;
+                }
+
                 directives.add(new SpriteReferenceOccurrence(directive, imageUrl,
-                    cssFile, lineNumber, backgroundProperty.important));
+                    cssFile, effectiveLineNumber, backgroundProperty.important, res.propertyInPrevLine));
+
+                prevLine = line;
             }
         }
         finally
@@ -282,21 +300,62 @@ public class SpriteDirectiveOccurrenceCollector
     /**
      * Extract the url to the image to be added to a sprite.
      */
-    CssProperty extractSpriteReferenceCssProperty(String css)
+    CssProperty extractSpriteReferenceCssProperty(String css) {
+        ExtractorResult res = extractSpriteReferenceCssProperty(css, null);
+
+        if (res != null) {
+            return res.cssProperty;
+        }
+        return null;
+    }
+
+    private class ExtractorResult {
+        public CssProperty cssProperty;
+        public boolean propertyInPrevLine;
+    }
+
+    /**
+     * Extract the url to the image to be added to a sprite.
+     */
+    ExtractorResult extractSpriteReferenceCssProperty(String css, String prevLine)
     {
-        final Matcher matcher = SPRITE_REFERENCE_DIRECTIVE.matcher(css);
+        Matcher matcher = SPRITE_REFERENCE_DIRECTIVE.matcher(css);
 
         // Remove the directive
-        final String noDirective = matcher.replaceAll("").trim();
+        String noDirective = matcher.replaceAll("").trim();
 
-        final Collection<CssProperty> rules = CssSyntaxUtils
+        boolean propertyInPrevLine = false;
+
+        Collection<CssProperty> rules = CssSyntaxUtils
             .extractProperties(noDirective);
         if (rules.size() == 0)
         {
-            messageLog.warning(
-                MessageType.NO_BACKGROUND_IMAGE_RULE_NEXT_TO_SPRITE_REFERENCE_DIRECTIVE,
-                css);
-            return null;
+            if (prevLine != null) {
+                matcher = SPRITE_REFERENCE_DIRECTIVE.matcher(prevLine);
+
+                // Remove the directive
+                noDirective = matcher.replaceAll("").trim();
+                rules = CssSyntaxUtils.extractProperties(noDirective);
+
+                if (rules.size() == 0)
+                {
+                    messageLog.warning(
+                            MessageType.NO_BACKGROUND_IMAGE_RULE_NEXT_TO_SPRITE_REFERENCE_DIRECTIVE,
+                            prevLine);
+                    messageLog.warning(
+                            MessageType.NO_BACKGROUND_IMAGE_RULE_NEXT_TO_SPRITE_REFERENCE_DIRECTIVE,
+                            css);
+                    return null;
+                }
+
+                propertyInPrevLine = true;
+
+            } else {
+                messageLog.warning(
+                        MessageType.NO_BACKGROUND_IMAGE_RULE_NEXT_TO_SPRITE_REFERENCE_DIRECTIVE,
+                        css);
+                return null;
+            }
         }
 
         if (rules.size() > 1)
@@ -315,6 +374,10 @@ public class SpriteDirectiveOccurrenceCollector
             return null;
         }
 
-        return backgroundImageRule;
+        ExtractorResult result = new ExtractorResult();
+        result.cssProperty = backgroundImageRule;
+        result.propertyInPrevLine = propertyInPrevLine;
+
+        return result;
     }
 }

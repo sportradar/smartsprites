@@ -289,7 +289,7 @@ public class SpriteBuilder
         int lastReferenceReplacementLine = -1;
 
         boolean markSpriteImages = parameters.isMarkSpriteImages();
-        
+        boolean skipNextLine = false;
         // Generate UID for sprite file
         try
         {
@@ -301,6 +301,11 @@ public class SpriteBuilder
             {
                 originalCssLineNumber++;
                 messageLog.setLine(originalCssLineNumber);
+
+                if (skipNextLine) {
+                    skipNextLine = false;
+                    continue;
+                }
 
                 if (originalCssLine.contains("}"))
                 {
@@ -350,6 +355,10 @@ public class SpriteBuilder
                         processedCssWriter.write("  background-size: "
                             + Math.round(spriteReferenceReplacement.spriteImage.spriteWidth / scale) + "px "
                             + Math.round(spriteReferenceReplacement.spriteImage.spriteHeight / scale) + "px;\n");
+                    }
+
+                    if (spriteReferenceReplacement.spriteReferenceOccurrence.dualLine) {
+                        skipNextLine = true;
                     }
 
                     continue;
