@@ -328,8 +328,11 @@ public class SpriteImageBuilder
 
             final float scaledImageWidth = spriteReferenceOccurrence.getRequiredWidth(image, layout) / spriteScale;
             final float scaledImageHeight = spriteReferenceOccurrence.getRequiredHeight(image, layout) / spriteScale;
-            if (Math.round(scaledImageWidth) != scaledImageWidth ||
-                Math.round(scaledImageHeight) != scaledImageHeight)
+
+            final int scaledImageWidthPx = Math.round(scaledImageWidth);
+            final int scaledImageHeightPx = Math.round(scaledImageHeight);
+            if (scaledImageWidthPx != scaledImageWidth ||
+                scaledImageHeightPx != scaledImageHeight)
             {
                 messageLog.warning(MessageType.IMAGE_FRACTIONAL_SCALE_VALUE,
                     spriteReferenceOccurrence.imagePath, scaledImageWidth, scaledImageHeight);
@@ -337,7 +340,7 @@ public class SpriteImageBuilder
 
             final int adjustedImageOffset = Math.round(imageOffset / spriteScale);
             spriteReplacements.put(spriteReferenceOccurrence,
-                spriteReferenceOccurrence.buildReplacement(layout, adjustedImageOffset));
+                spriteReferenceOccurrence.buildReplacement(layout, adjustedImageOffset, scaledImageHeightPx, scaledImageWidthPx, spriteImageOccurrence));
         }
 
         // Render the sprite image and build sprite reference replacements

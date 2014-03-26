@@ -362,6 +362,11 @@ public class SpriteBuilder
                             + Math.round(spriteReferenceReplacement.spriteImage.spriteHeight / scale) + "px;\n");
                     }
 
+                    if (spriteReferenceReplacement.includeDimensions) {
+                        processedCssWriter.write("  width: " + spriteReferenceReplacement.imageWidthPx + "px;\n");
+                        processedCssWriter.write("  height: " + spriteReferenceReplacement.imageHeightPx + "px;\n");
+                    }
+
                     if (spriteReferenceReplacement.spriteReferenceOccurrence.dualLine) {
                         skipNextLine = true;
                     }

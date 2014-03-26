@@ -178,7 +178,7 @@ public class SpriteReferenceOccurrence extends SpriteDirectiveOccurrence
      * individual image was rendered.
      */
     public SpriteReferenceReplacement buildReplacement(SpriteImageLayout layout,
-        int offset)
+        int offset, int imgHeightPx, int imgWidthPx, SpriteImageOccurrence spriteImageOccurrence)
     {
         if (SpriteImageLayout.VERTICAL.equals(layout))
         {
@@ -200,7 +200,10 @@ public class SpriteReferenceOccurrence extends SpriteDirectiveOccurrence
             return new SpriteReferenceReplacement(
                 this,
                 offset,
-                horizontalPosition);
+                horizontalPosition,
+                imgHeightPx,
+                imgWidthPx,
+                spriteImageOccurrence);
         }
         else
         {
@@ -222,7 +225,10 @@ public class SpriteReferenceOccurrence extends SpriteDirectiveOccurrence
             return new SpriteReferenceReplacement(
                 this,
                 verticalPosition,
-                offset);
+                offset,
+                imgHeightPx,
+                imgWidthPx,
+                spriteImageOccurrence);
         }
     }
 }

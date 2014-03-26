@@ -24,25 +24,39 @@ public class SpriteReferenceReplacement
     /** Numeric representation of the vertical position of this sprite replacement */
     public final int verticalPosition;
 
-    public SpriteReferenceReplacement(
+    /** Height of referencing image (not sprite!) */
+    public final int imageHeightPx;
+
+    /** Width of referencing image (not sprite!) */
+    public final int imageWidthPx;
+
+    public final boolean includeDimensions;
+
+public SpriteReferenceReplacement(
         SpriteReferenceOccurrence spriteReferenceOccurrence, int verticalPosition,
-        String horizontalPosition)
+        String horizontalPosition, int heightPx, int widthPx, SpriteImageOccurrence spriteImageOccurrence)
     {
         this.spriteReferenceOccurrence = spriteReferenceOccurrence;
         this.horizontalPosition = -1;
         this.horizontalPositionString = horizontalPosition;
         this.verticalPosition = verticalPosition;
         this.verticalPositionString = "-" + verticalPosition + "px";
+        this.imageHeightPx = heightPx;
+        this.imageWidthPx = widthPx;
+        this.includeDimensions = spriteImageOccurrence.spriteImageDirective.includeDimensions;
     }
 
     public SpriteReferenceReplacement(
         SpriteReferenceOccurrence spriteReferenceOccurrence, String verticalPosition,
-        int horizontalPosition)
+        int horizontalPosition, int heightPx, int widthPx, SpriteImageOccurrence spriteImageOccurrence)
     {
         this.spriteReferenceOccurrence = spriteReferenceOccurrence;
         this.horizontalPosition = horizontalPosition;
         this.horizontalPositionString = "-" + horizontalPosition + "px";
         this.verticalPosition = -1;
         this.verticalPositionString = verticalPosition;
+        this.imageHeightPx = heightPx;
+        this.imageWidthPx = widthPx;
+        this.includeDimensions = spriteImageOccurrence.spriteImageDirective.includeDimensions;
     }
 }
