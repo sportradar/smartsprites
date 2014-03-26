@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.carrot2.labs.smartsprites.message.LevelCounterMessageSink;
@@ -28,6 +29,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import com.google.common.io.Closeables;
+import sun.misc.Regexp;
 
 /**
  * Performs all stages of sprite building. This class is not thread-safe.
@@ -274,6 +276,7 @@ public class SpriteBuilder
         Map<Integer, SpriteReferenceReplacement> spriteReplacementsByLineNumber)
         throws IOException
     {
+        final Pattern refCommentRegex = Pattern.compile("/\\*.*?\\*/");
         final String processedCssFile = getProcessedCssFile(originalCssFile);
         final BufferedReader originalCssReader = new BufferedReader(
             resourceHandler.getResourceAsReader(originalCssFile));
@@ -303,6 +306,8 @@ public class SpriteBuilder
                 messageLog.setLine(originalCssLineNumber);
 
                 if (skipNextLine) {
+                    String res = refCommentRegex.matcher(originalCssLine).replaceAll("");
+                    processedCssWriter.write(res + "\n");
                     skipNextLine = false;
                     continue;
                 }
