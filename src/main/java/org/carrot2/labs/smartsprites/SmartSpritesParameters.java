@@ -330,13 +330,17 @@ public final class SmartSpritesParameters
         return documentRootDir;
     }
 
+    public boolean hasDocumentRootDir()
+    {
+        return StringUtils.isNotBlank(documentRootDir);
+    }
+
     public String getDocumentRelativeRootDir() {
         return documentRelativeRootDir;
     }
 
-    public boolean hasDocumentRootDir()
-    {
-        return StringUtils.isNotBlank(documentRootDir);
+    public boolean hasRelativeRootDir() {
+        return StringUtils.isNotBlank(documentRelativeRootDir);
     }
 
     public MessageLevel getLogLevel()

@@ -257,7 +257,7 @@ public class SpriteImageBuilder
         final String path = resourceHandler.getResourcePath(cssFile, imagePath);
 
         // Just handle the root directory changing
-        if (!imagePath.startsWith("/") && parameters.hasOutputDir())
+        if (!imagePath.startsWith("/") && parameters.hasOutputDir() && !parameters.hasRelativeRootDir())
         {
             return FileUtils.changeRoot(path, parameters.getRootDir(),
                 parameters.getOutputDir());
