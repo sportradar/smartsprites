@@ -27,15 +27,15 @@ public class SpriteReferenceDirectiveTest extends TestWithMemoryMessageSink
 {
     private static final SpriteImageDirective VERTICAL_SPRITE_IMAGE_DIRECTIVE = new SpriteImageDirective(
         "vsprite", "sprite.png", SpriteImageLayout.VERTICAL, SpriteImageFormat.PNG,
-        Ie6Mode.AUTO, Color.WHITE, SpriteUidType.NONE, 1);
+        Ie6Mode.AUTO, Color.WHITE, SpriteUidType.NONE, 1, true);
 
     private static final SpriteImageDirective HORIZONTAL_SPRITE_IMAGE_DIRECTIVE = new SpriteImageDirective(
         "hsprite", "hsprite.png", SpriteImageLayout.HORIZONTAL, SpriteImageFormat.PNG,
-        Ie6Mode.AUTO, Color.WHITE, SpriteUidType.NONE, 1);
+        Ie6Mode.AUTO, Color.WHITE, SpriteUidType.NONE, 1, true);
 
     private static final SpriteImageDirective VERTICAL_SPRITE_IMAGE_DIRECTIVE_WITH_LAYOUT = new SpriteImageDirective(
         "vsprite", "sprite.png", SpriteImageLayout.VERTICAL, SpriteImageFormat.PNG,
-        Ie6Mode.AUTO, Color.WHITE, SpriteUidType.NONE, 1, new SpriteLayoutProperties(
+        Ie6Mode.AUTO, Color.WHITE, SpriteUidType.NONE, 1, true, new SpriteLayoutProperties(
             SpriteAlignment.REPEAT, 1, 2, 3, 4));
 
     private static final Map<String, SpriteImageDirective> SPRITE_IMAGE_DIRECTIVES = ImmutableMap
